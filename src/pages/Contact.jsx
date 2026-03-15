@@ -1,21 +1,89 @@
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-const packageOptions = [
-  { value: 'starter',         label: "Starter ($999)" },
-  { value: 'growth',          label: "Growth ($2,500)" },
-  { value: 'custom',          label: "Custom — Let's talk" },
-  { value: 'retainer-standard', label: "Monthly Retainer" },
-  { value: 'retainer-growth', label: "Monthly Retainer" },
-  { value: 'not-sure',        label: "Not sure yet" },
+const PACKAGE_OPTIONS = [
+  { value: 'starter', label: 'Starter ($999)' },
+  { value: 'growth', label: 'Growth ($2,500)' },
+  { value: 'custom', label: "Custom - Let's talk" },
+  { value: 'retainer', label: 'Monthly Retainer' },
+  { value: 'not-sure', label: 'Not sure yet' },
 ]
+
+const SERVICE_OPTIONS = [
+  { value: 'website-redesign', label: 'Website Redesign' },
+  { value: 'ai-automations', label: 'AI Automations' },
+  { value: 'full-transformation', label: 'Full Transformation' },
+  { value: 'not-sure', label: 'Not sure yet' },
+]
+
+function normalizePackageParam(packageParam) {
+  if (['retainer-standard', 'retainer-growth'].includes(packageParam)) {
+    return 'retainer'
+  }
+
+  return PACKAGE_OPTIONS.some((option) => option.value === packageParam)
+    ? packageParam
+    : ''
+}
 
 export default function Contact() {
   const [searchParams] = useSearchParams()
-  const packageParam = searchParams.get('package') || ''
+
+  const defaultPackage = useMemo(() => normalizePackageParam(searchParams.get('package') || ''), [searchParams])
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    companyWebsite: '',
+    packageInterest: defaultPackage,
+    serviceInterest: '',
+    projectDetails: '',
+    website: '',
+    formStartedAt: Date.now(),
+  })
+
+  const [status, setStatus] = useState('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  function updateField(field, value) {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+
+    if (status === 'submitting') {
+      return
+    }
+
+    setStatus('submitting')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok || !data?.ok || !data?.redirectUrl) {
+        throw new Error(data?.error || 'Unable to submit right now. Please try again.')
+      }
+
+      window.location.href = data.redirectUrl
+    } catch (error) {
+      setStatus('error')
+      setErrorMessage(error instanceof Error ? error.message : 'Unable to submit right now. Please try again.')
+    }
+  }
+
+  const submitLabel = status === 'submitting' ? 'Submitting...' : 'Book my free call ->'
 
   return (
     <>
-      {/* ── PAGE HEADER ──────────────────────── */}
       <section className="page-header">
         <div className="container">
           <div className="label">Contact</div>
@@ -24,81 +92,140 @@ export default function Contact() {
           </h1>
           <p className="page-header-sub">
             Whether you know exactly what you need or are still figuring it
-            out — we're happy to help.
+            out - we're happy to help.
           </p>
         </div>
       </section>
 
-      {/* ── FORM ─────────────────────────────── */}
       <section className="contact-section">
         <div className="container">
-          <div className="contact-form-inner">
+          <form className="contact-form-inner" onSubmit={handleSubmit}>
             <div className="label" style={{ marginBottom: 52 }}>Book a discovery call</div>
+
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={formData.website}
+              onChange={(event) => updateField('website', event.target.value)}
+              style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none' }}
+            />
 
             <div className="contact-form-grid">
               <div className="contact-form-field">
-                <label className="contact-form-label">First name</label>
-                <input className="contact-form-input" type="text" placeholder="Jordan" />
+                <label className="contact-form-label" htmlFor="firstName">First name</label>
+                <input
+                  id="firstName"
+                  className="contact-form-input"
+                  type="text"
+                  placeholder="Jordan"
+                  value={formData.firstName}
+                  onChange={(event) => updateField('firstName', event.target.value)}
+                  required
+                />
               </div>
               <div className="contact-form-field">
-                <label className="contact-form-label">Last name</label>
-                <input className="contact-form-input" type="text" placeholder="Lee" />
+                <label className="contact-form-label" htmlFor="lastName">Last name</label>
+                <input
+                  id="lastName"
+                  className="contact-form-input"
+                  type="text"
+                  placeholder="Lee"
+                  value={formData.lastName}
+                  onChange={(event) => updateField('lastName', event.target.value)}
+                  required
+                />
               </div>
             </div>
 
             <div className="contact-form-field">
-              <label className="contact-form-label">Email</label>
-              <input className="contact-form-input" type="email" placeholder="jordan@company.com" />
-            </div>
-
-            <div className="contact-form-field">
-              <label className="contact-form-label">Company / Website</label>
-              <input className="contact-form-input" type="text" placeholder="Acme Inc. / acme.co" />
-            </div>
-
-            <div className="contact-form-field">
-              <label className="contact-form-label">Package interest</label>
-              <select
+              <label className="contact-form-label" htmlFor="email">Email</label>
+              <input
+                id="email"
                 className="contact-form-input"
-                style={{ cursor: 'pointer' }}
-                defaultValue={['retainer-standard', 'retainer-growth'].includes(packageParam) ? 'retainer' : packageParam}
-              >
-                <option value="" disabled>Select a package</option>
-                <option value="starter">Starter ($999)</option>
-                <option value="growth">Growth ($2,500)</option>
-                <option value="custom">Custom — Let's talk</option>
-                <option value="retainer">Monthly Retainer</option>
-                <option value="not-sure">Not sure yet</option>
-              </select>
-            </div>
-
-            <div className="contact-form-field">
-              <label className="contact-form-label">What are you looking for?</label>
-              <select className="contact-form-input" style={{ cursor: 'pointer' }}>
-                <option value="" disabled selected>Select a service</option>
-                <option>Website Redesign</option>
-                <option>AI Automations</option>
-                <option>Full Transformation</option>
-                <option>Not sure yet</option>
-              </select>
-            </div>
-
-            <div className="contact-form-field">
-              <label className="contact-form-label">Tell us about your project</label>
-              <textarea
-                className="contact-form-input"
-                placeholder="What does your business do? What problem are you trying to solve?"
-                style={{ height: 110 }}
+                type="email"
+                placeholder="jordan@company.com"
+                value={formData.email}
+                onChange={(event) => updateField('email', event.target.value)}
+                required
               />
             </div>
 
+            <div className="contact-form-field">
+              <label className="contact-form-label" htmlFor="companyWebsite">Company / Website</label>
+              <input
+                id="companyWebsite"
+                className="contact-form-input"
+                type="text"
+                placeholder="Acme Inc. / acme.co"
+                value={formData.companyWebsite}
+                onChange={(event) => updateField('companyWebsite', event.target.value)}
+              />
+            </div>
+
+            <div className="contact-form-field">
+              <label className="contact-form-label" htmlFor="packageInterest">Package interest</label>
+              <select
+                id="packageInterest"
+                className="contact-form-input"
+                style={{ cursor: 'pointer' }}
+                value={formData.packageInterest}
+                onChange={(event) => updateField('packageInterest', event.target.value)}
+                required
+              >
+                <option value="" disabled>Select a package</option>
+                {PACKAGE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="contact-form-field">
+              <label className="contact-form-label" htmlFor="serviceInterest">What are you looking for?</label>
+              <select
+                id="serviceInterest"
+                className="contact-form-input"
+                style={{ cursor: 'pointer' }}
+                value={formData.serviceInterest}
+                onChange={(event) => updateField('serviceInterest', event.target.value)}
+                required
+              >
+                <option value="" disabled>Select a service</option>
+                {SERVICE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="contact-form-field">
+              <label className="contact-form-label" htmlFor="projectDetails">Tell us about your project</label>
+              <textarea
+                id="projectDetails"
+                className="contact-form-input"
+                placeholder="What does your business do? What problem are you trying to solve?"
+                style={{ height: 110 }}
+                value={formData.projectDetails}
+                onChange={(event) => updateField('projectDetails', event.target.value)}
+                required
+              />
+            </div>
+
+            {errorMessage ? (
+              <p style={{ color: '#b00020', margin: '12px 0 0', fontSize: 13 }}>
+                {errorMessage}
+              </p>
+            ) : null}
+
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
-              <button className="contact-submit">Book my free call →</button>
+              <button className="contact-submit" type="submit" disabled={status === 'submitting'}>
+                {submitLabel}
+              </button>
               <span style={{ fontSize: 11, color: '#888', letterSpacing: '0.04em' }}>
                 hello@figureconsulting.co
               </span>
             </div>
-          </div>
+          </form>
         </div>
       </section>
     </>
