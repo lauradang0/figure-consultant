@@ -131,6 +131,9 @@ function PricingGrid({ items }) {
   const defaultSelected = items.findIndex(p => p.highlight)
   const [selected, setSelected] = useState(defaultSelected >= 0 ? defaultSelected : 0)
 
+  const formatAmount = (value) => Number(value).toLocaleString('en-US')
+  const toNumber = (value) => Number(String(value).replace(/,/g, ''))
+
   return (
     <div style={{
       display: 'grid',
@@ -141,18 +144,20 @@ function PricingGrid({ items }) {
     }}>
       {items.map((p, i) => {
         const isSelected = selected === i
+        const isDiscounted = Boolean(p.originalPrice)
         return (
           <div
             key={p.tier}
             className={`pricing-card${isSelected ? ' pricing-card--highlight' : ''}`}
             onClick={() => setSelected(i)}
             style={{
-              background: isSelected ? 'var(--black)' : 'transparent',
+              background: isSelected ? 'var(--black)' : (isDiscounted ? 'rgba(0,0,0,0.02)' : 'transparent'),
               padding: '36px 32px 32px',
               display: 'flex',
               flexDirection: 'column',
-              borderRight: i < 2 ? '1px solid var(--rule)' : 'none',
+              borderRight: i < items.length - 1 ? '1px solid var(--rule)' : 'none',
               position: 'relative',
+              overflow: 'hidden',
             }}
           >
             {isSelected && (
@@ -163,17 +168,42 @@ function PricingGrid({ items }) {
                 background: '#fff',
               }} />
             )}
-
+            {isDiscounted && (
+              <div style={{
+                position: 'absolute',
+                top: 14,
+                right: -34,
+                transform: 'rotate(35deg)',
+                background: isSelected ? '#fff' : 'var(--black)',
+                color: isSelected ? 'var(--black)' : '#fff',
+                fontSize: 10,
+                fontWeight: 800,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                padding: '5px 38px',
+                zIndex: 2,
+                boxShadow: '0 6px 12px rgba(0,0,0,0.22)',
+              }}>
+                50% OFF
+              </div>
+            )}
             {/* Label */}
             <div style={{
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: isSelected ? 'rgba(255,255,255,0.45)' : 'var(--muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 10,
               marginBottom: 16,
             }}>
-              {p.highlight ? 'Most popular' : p.index}
+              <span style={{
+                fontSize: 10,
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: isSelected ? '#fff' : 'var(--muted)',
+              }}>
+                {p.highlight ? 'Most popular' : p.index}
+              </span>
             </div>
 
             {/* Tier name */}
@@ -192,7 +222,7 @@ function PricingGrid({ items }) {
             <p style={{
               fontSize: 12,
               lineHeight: 1.7,
-              color: isSelected ? 'rgba(255,255,255,0.5)' : 'var(--muted)',
+              color: isSelected ? '#fff' : 'var(--muted)',
               marginBottom: 28,
             }}>
               {p.desc}
@@ -220,7 +250,7 @@ function PricingGrid({ items }) {
                     fontWeight: 700,
                     letterSpacing: '-0.03em',
                     lineHeight: 1,
-                    color: isSelected ? 'rgba(255,255,255,0.5)' : 'var(--muted)',
+                    color: isSelected ? '#fff' : 'var(--muted)',
                     marginBottom: 6,
                     textDecoration: 'line-through',
                     textDecorationColor: isSelected ? 'rgba(255,255,255,0.7)' : 'var(--black)',
@@ -244,13 +274,29 @@ function PricingGrid({ items }) {
                 </div>
                 <div style={{
                   fontSize: 11,
-                  color: isSelected ? 'rgba(255,255,255,0.4)' : 'var(--muted)',
+                  color: isSelected ? '#fff' : 'var(--muted)',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
                   marginBottom: 28,
                 }}>
                   {p.priceLabel}
                 </div>
+                {p.originalPrice && (
+                  <div style={{
+                    fontSize: 11,
+                    fontWeight: 800,
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    color: isSelected ? '#fff' : 'var(--black)',
+                    background: isSelected ? 'rgba(255,255,255,0.16)' : 'rgba(0,0,0,0.04)',
+                    border: `1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'var(--rule)'}`,
+                    width: 'fit-content',
+                    padding: '4px 8px',
+                    marginBottom: 24,
+                  }}>
+                    Save ${formatAmount(toNumber(p.originalPrice) - toNumber(p.price))}
+                  </div>
+                )}
               </>
             )}
 
@@ -260,13 +306,13 @@ function PricingGrid({ items }) {
                 <li key={f} style={{
                   fontSize: 12,
                   padding: '5px 0',
-                  color: isSelected ? 'rgba(255,255,255,0.75)' : 'var(--black)',
+                  color: isSelected ? '#fff' : 'var(--black)',
                   display: 'flex',
                   gap: 8,
                   alignItems: 'flex-start',
                 }}>
                   <span style={{
-                    color: isSelected ? 'rgba(255,255,255,0.5)' : 'var(--black)',
+                    color: isSelected ? '#fff' : 'var(--black)',
                     flexShrink: 0,
                     marginTop: 1,
                   }}>✓</span>
@@ -361,6 +407,24 @@ export default function Pricing() {
               ))}
             </div>
           </div>
+
+          {pricingTab === 'onetime' && (
+            <div style={{
+              margin: '0 auto 24px',
+              maxWidth: 760,
+              border: '1px solid #000',
+              background: 'linear-gradient(90deg, #000 0%, #1a1a1a 100%)',
+              color: '#fff',
+              textAlign: 'center',
+              padding: '12px 16px',
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+            }}>
+              Limited Launch Sale: Discounted One-Time Builds
+            </div>
+          )}
 
           {/* Active plans */}
           <div className="page-fade" key={pricingTab}>
