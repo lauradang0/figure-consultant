@@ -75,7 +75,7 @@ export default function About() {
                 fontWeight: 400,
                 marginBottom: 32,
               }}>
-                Figure Consulting is a boutique digital agency run by engineers
+                Figured Consulting is a boutique digital agency run by engineers
                 and designers who have worked at product companies.
               </p>
               <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 20 }}>

@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="footer-inner">
         <div className="footer-top">
           <div>
-            <div className="footer-brand-name">Figure Consulting</div>
+            <div className="footer-brand-name">Figured Consulting</div>
             <p className="footer-tagline">
               Websites and AI automations that turn visitors into revenue.
               Built by builders, not account managers.
@@ -33,14 +33,14 @@ export default function Footer() {
           <div>
             <div className="footer-col-title">Contact</div>
             <div className="footer-links">
-              <a href="mailto:hello@figureconsulting.co">hello@figureconsulting.co</a>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
+              <a href="mailto:figuredconsulting@gmail.com">figuredconsulting@gmail.com</a>
+              <Link to="/privacy">Privacy Policy</Link>
+              <Link to="/terms">Terms of Service</Link>
             </div>
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 Figure Consulting. All rights reserved.</span>
+          <span>© 2026 Figured Consulting. All rights reserved.</span>
           <span>Now accepting Q2 2026 clients</span>
         </div>
       </div>

@@ -46,7 +46,7 @@ export default function Home() {
         <div className="container">
           <p className="logos-label">Trusted by fast-growing companies</p>
           <div className="logos-row">
-            {['Acme Co', 'NovaTech', 'Bloom Studio', 'Vertex Labs', 'Crestline', 'Orbit'].map(name => (
+            {['Luxury Nail Spa', 'Joe Gym', "Laura's Portfolio", "Francis's Portfolio"].map(name => (
               <span key={name} className="logo-name">{name}</span>
             ))}
           </div>

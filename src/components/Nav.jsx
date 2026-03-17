@@ -16,7 +16,7 @@ export default function Nav() {
       <nav>
         <div className="nav-inner">
           <Link to="/" className="nav-logo" onClick={() => setOpen(false)}>
-            Figure Consulting
+            Figured Consulting
           </Link>
 
           <div className="nav-links">

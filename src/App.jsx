@@ -8,6 +8,8 @@ import CaseStudyDetail from './pages/CaseStudyDetail'
 import Pricing from './pages/Pricing'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -32,6 +34,8 @@ function AppRoutes() {
           <Route path="/pricing"       element={<PageWrapper><Pricing /></PageWrapper>} />
           <Route path="/about"         element={<PageWrapper><About /></PageWrapper>} />
           <Route path="/contact"       element={<PageWrapper><Contact /></PageWrapper>} />
+          <Route path="/privacy"       element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
+          <Route path="/terms"         element={<PageWrapper><TermsOfService /></PageWrapper>} />
           {/* backward compat */}
           <Route path="/case-studies"       element={<PageWrapper><Work /></PageWrapper>} />
           <Route path="/case-studies/:slug" element={<PageWrapper><CaseStudyDetail /></PageWrapper>} />
