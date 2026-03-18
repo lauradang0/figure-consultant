@@ -72,11 +72,7 @@ export default function Work() {
 
       {/* ── EDITORIAL GRID ───────────────────── */}
       <section style={{ padding: 0 }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 0,
-        }}>
+        <div className="work-editorial-grid">
           {work.map((w, i) => (
             <Link
               key={`${w.slug}-${i}`}

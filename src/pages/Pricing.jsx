@@ -135,13 +135,7 @@ function PricingGrid({ items }) {
   const toNumber = (value) => Number(String(value).replace(/,/g, ''))
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 0,
-      alignItems: 'stretch',
-      border: '1px solid var(--rule)',
-    }}>
+    <div className="pricing-3col-grid">
       {items.map((p, i) => {
         const isSelected = selected === i
         const isDiscounted = Boolean(p.originalPrice)
@@ -439,7 +433,7 @@ export default function Pricing() {
       {/* ── FAQ — accordion ───────────────────── */}
       <section style={{ padding: '64px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 64 }}>
+          <div className="faq-layout">
             <div>
               <div className="label" style={{ marginBottom: 14 }}>FAQ</div>
               <h2 style={{

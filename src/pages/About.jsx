@@ -65,7 +65,7 @@ export default function About() {
       {/* ── BODY ─────────────────────────────── */}
       <section className="about-section">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80 }}>
+          <div className="about-body-grid">
             <div>
               <div className="label" style={{ marginBottom: 36 }}>Who we are</div>
               <p style={{

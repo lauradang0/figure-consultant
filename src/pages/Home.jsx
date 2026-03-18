@@ -61,7 +61,7 @@ export default function Home() {
           {/* Header — centered */}
           <div style={{ textAlign: 'center', marginBottom: 44 }}>
             <div className="label" style={{ marginBottom: 14 }}>How it works</div>
-            <h2 style={{
+            <h2 className="process-section-title" style={{
               fontFamily: 'var(--font-serif)',
               fontSize: 42,
               fontWeight: 700,
@@ -77,7 +77,7 @@ export default function Home() {
           </div>
 
           {/* Steps — 4 columns, no dividers, centered */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+          <div className="process-grid">
             {[
               { title: 'Discovery Call',      desc: '30-min call to understand your goals, current challenges, and what success looks like.' },
               { title: 'Strategy & Proposal', desc: 'Custom roadmap and proposal delivered within 48 hours of the call.' },

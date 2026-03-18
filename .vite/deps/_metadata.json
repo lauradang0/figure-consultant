@@ -1,0 +1,34 @@
+{
+  "hash": "2c7dbb5a",
+  "configHash": "8af3357f",
+  "lockfileHash": "b913b2aa",
+  "browserHash": "559ac2ce",
+  "optimized": {
+    "react": {
+      "src": "../../../Figure consultant/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "e91e8afa",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../Figure consultant/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "45975e28",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../../Figure consultant/node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "43e418a8",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-MZJ4H3WB": {
+      "file": "chunk-MZJ4H3WB.js"
+    },
+    "chunk-NKTMKRR2": {
+      "file": "chunk-NKTMKRR2.js"
+    }
+  }
+}
