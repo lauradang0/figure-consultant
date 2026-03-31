@@ -109,20 +109,6 @@ export default function Home() {
 
       <hr className="rule" />
 
-      {/* ── LOGOS ────────────────────────────── */}
-      <section className="logos-section">
-        <div className="container">
-          <p className="logos-label">Trusted by fast-growing companies</p>
-          <div className="logos-row">
-            {['Luxury Nail Spa', 'Joe Gym Fitness', "Laura's Portfolio", "Francis's Portfolio"].map(name => (
-              <span key={name} className="logo-name">{name}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <hr className="rule" />
-
       {/* ── PROCESS ──────────────────────────── */}
       <section style={{ padding: '52px 0' }}>
         <div className="container">
@@ -187,6 +173,20 @@ export default function Home() {
                   {s.desc}
                 </p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <hr className="rule" />
+
+      {/* ── LOGOS ────────────────────────────── */}
+      <section className="logos-section">
+        <div className="container">
+          <p className="logos-label">Trusted by fast-growing companies</p>
+          <div className="logos-row">
+            {['Luxury Nail Spa', 'Joe Gym Fitness', "Laura's Portfolio", "Francis's Portfolio"].map(name => (
+              <span key={name} className="logo-name">{name}</span>
             ))}
           </div>
         </div>
