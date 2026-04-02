@@ -93,11 +93,12 @@ function useTypewriter() {
     return () => clearTimeout(timeoutRef.current)
   }, [displayed, phraseIdx, isDeleting])
 
-  return displayed
+  const isComplete = !isDeleting && displayed.length === PHRASES[phraseIdx].length
+  return { displayed, announced: isComplete ? PHRASES[phraseIdx] : '' }
 }
 
 export default function Home() {
-  const typed = useTypewriter()
+  const { displayed: typed, announced } = useTypewriter()
   return (
     <>
       {/* ── HERO ─────────────────────────────── */}
@@ -105,8 +106,10 @@ export default function Home() {
         <div className="container">
           <h1 className="hero-title">
             We build digital products that{' '}
-            <span className="hero-typed">
-              {typed}<span className="hero-cursor" aria-hidden="true" /></span>
+            <span className="hero-typed" aria-hidden="true">
+              {typed}<span className="hero-cursor" aria-hidden="true" />
+            </span>
+            <span className="sr-only" aria-live="polite" aria-atomic="true">{announced}</span>
           </h1>
           <p className="hero-sub">
             Websites, software, and AI tools — built fast, built right.
