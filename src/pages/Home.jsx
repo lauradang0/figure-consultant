@@ -106,8 +106,7 @@ export default function Home() {
           <h1 className="hero-title">
             We build digital products that{' '}
             <span className="hero-typed">
-              {typed}<span className="hero-cursor" aria-hidden="true">|</span>
-            </span>
+              {typed}<span className="hero-cursor" aria-hidden="true" /></span>
           </h1>
           <p className="hero-sub">
             Websites, software, and AI tools — built fast, built right.
