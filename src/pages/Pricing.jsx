@@ -21,8 +21,8 @@ const plans = [
   {
     index: '02',
     tier: 'Growth',
-    price: '1,250',
-    originalPrice: '2,500',
+    price: '1,249',
+    originalPrice: '2,499',
     priceLabel: 'one-time',
     desc: 'Our most-chosen package. Built to convert visitors into leads from day one.',
     features: [
@@ -106,24 +106,24 @@ const retainerPlans = [
 
 const faqs = [
   {
+    q: "How fast can you actually launch?",
+    a: "Most projects go live within 2–4 weeks from your kickoff call. Starter and Growth builds typically land in 3 weeks. Custom projects with automation or AI integrations may take 5–6 weeks. You'll get a precise timeline in your proposal — no vague estimates.",
+  },
+  {
     q: "What's included in the build fee?",
-    a: "Design, development, integrations, QA, and launch are all included. Hosting is separate and typically runs $20–50/month depending on your needs.",
+    a: "Everything needed to go live: design, development, integrations, QA, and launch support. Hosting is separate and typically runs $20–50/month depending on your stack. No hidden fees, no surprise invoices after the fact.",
   },
   {
-    q: "How long does a project take?",
-    a: "Most projects launch within 3–4 weeks from the kickoff call. Custom projects may take 5–6 weeks. We'll give you a precise timeline in your proposal.",
-  },
-  {
-    q: "Can I cancel my monthly retainer?",
-    a: "Yes. Monthly retainers are month-to-month with no long-term commitment. Cancel or pause anytime with 14 days' notice.",
+    q: "Can I add AI or automation to my project?",
+    a: "Yes — and it's one of our strengths. AI-powered features, workflow automation, and custom integrations can be scoped into any plan. If you're not sure what's possible, the free discovery call is the best place to start.",
   },
   {
     q: "Do you offer payment plans?",
-    a: "Yes. For projects over $2,000 we offer 50% upfront / 50% on launch. We can also discuss monthly payment options for the right fit.",
+    a: "Yes. We offer a 50% upfront / 50% on launch split for all builds. If you need a different arrangement, bring it up on the call — we're flexible for the right fit.",
   },
   {
-    q: "Do you work with early-stage startups?",
-    a: "Absolutely. Our Starter plan is designed for founders who are just getting started and need a professional online presence without a massive investment.",
+    q: "Can I start with a one-time build and add a retainer later?",
+    a: "Absolutely. Most clients start with a one-time build, then move to a monthly retainer once they see the results. There's no pressure — add, pause, or cancel the retainer anytime with 14 days' notice.",
   },
 ]
 

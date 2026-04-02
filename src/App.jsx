@@ -10,6 +10,8 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
+import BlogList from './pages/BlogList'
+import BlogPost from './pages/BlogPost'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -31,6 +33,8 @@ function AppRoutes() {
           <Route path="/"              element={<PageWrapper><Home /></PageWrapper>} />
           <Route path="/work"          element={<PageWrapper><Work /></PageWrapper>} />
           <Route path="/work/:slug"    element={<PageWrapper><CaseStudyDetail /></PageWrapper>} />
+          <Route path="/blog"          element={<PageWrapper><BlogList /></PageWrapper>} />
+          <Route path="/blog/:slug"    element={<PageWrapper><BlogPost /></PageWrapper>} />
           <Route path="/pricing"       element={<PageWrapper><Pricing /></PageWrapper>} />
           <Route path="/about"         element={<PageWrapper><About /></PageWrapper>} />
           <Route path="/contact"       element={<PageWrapper><Contact /></PageWrapper>} />
