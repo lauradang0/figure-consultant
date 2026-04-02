@@ -168,11 +168,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: 24,
-          }}>
+          <div className="featured-work-grid">
             {featuredWork.map(w => (
               <Link
                 key={w.slug}
@@ -284,21 +280,9 @@ export default function Home() {
       <section style={{ padding: '64px 0' }}>
         <div className="container">
           <div className="label" style={{ marginBottom: 36, textAlign: 'center' }}>What clients say</div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            borderTop: '1px solid var(--rule)',
-          }}>
+          <div className="testimonials-grid">
             {testimonials.map((t, i) => (
-              <div key={t.name} style={{
-                padding: '36px 36px 36px 0',
-                paddingLeft: i === 0 ? 0 : 36,
-                borderRight: i < testimonials.length - 1 ? '1px solid var(--rule)' : 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                gap: 32,
-              }}>
+              <div key={t.name} className="testimonial-home-item">
                 <blockquote style={{
                   fontFamily: 'var(--font-serif)',
                   fontSize: 16,
