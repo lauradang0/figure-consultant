@@ -1,11 +1,26 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { posts } from '../data/posts'
 
 export default function BlogPost() {
   const { slug } = useParams()
-  const post = posts.find(p => p.slug === slug)
+  const [post, setPost] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [openFaq, setOpenFaq] = useState(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setPost(null)
+    setOpenFaq(null)
+    import(`../data/posts/${slug}.js`)
+      .then(mod => {
+        setPost(mod.default)
+        setLoading(false)
+      })
+      .catch(() => {
+        setPost(null)
+        setLoading(false)
+      })
+  }, [slug])
 
   useEffect(() => {
     if (!post) return
@@ -25,6 +40,16 @@ export default function BlogPost() {
       if (meta) meta.setAttribute('content', '')
     }
   }, [post])
+
+  if (loading) {
+    return (
+      <section style={{ padding: '120px 0', textAlign: 'center' }}>
+        <div className="container">
+          <p style={{ color: 'var(--text-muted)' }}>Loading…</p>
+        </div>
+      </section>
+    )
+  }
 
   if (!post) {
     return (

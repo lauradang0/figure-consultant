@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { posts } from '../data/posts'
+import { postsIndex as posts } from '../data/postsIndex'
 
 const categories = ['All', ...Array.from(new Set(posts.map(p => p.category))).sort()]
 

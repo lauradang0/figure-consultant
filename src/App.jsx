@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -10,8 +10,9 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
-import BlogList from './pages/BlogList'
-import BlogPost from './pages/BlogPost'
+
+const BlogList = lazy(() => import('./pages/BlogList'))
+const BlogPost = lazy(() => import('./pages/BlogPost'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -33,8 +34,8 @@ function AppRoutes() {
           <Route path="/"              element={<PageWrapper><Home /></PageWrapper>} />
           <Route path="/work"          element={<PageWrapper><Work /></PageWrapper>} />
           <Route path="/work/:slug"    element={<PageWrapper><CaseStudyDetail /></PageWrapper>} />
-          <Route path="/blog"          element={<PageWrapper><BlogList /></PageWrapper>} />
-          <Route path="/blog/:slug"    element={<PageWrapper><BlogPost /></PageWrapper>} />
+          <Route path="/blog"          element={<PageWrapper><Suspense fallback={null}><BlogList /></Suspense></PageWrapper>} />
+          <Route path="/blog/:slug"    element={<PageWrapper><Suspense fallback={null}><BlogPost /></Suspense></PageWrapper>} />
           <Route path="/pricing"       element={<PageWrapper><Pricing /></PageWrapper>} />
           <Route path="/about"         element={<PageWrapper><About /></PageWrapper>} />
           <Route path="/contact"       element={<PageWrapper><Contact /></PageWrapper>} />
