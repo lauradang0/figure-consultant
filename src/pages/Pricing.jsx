@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState, useRef, useLayoutEffect } from 'react'
+import { useState } from 'react'
 
 const plans = [
   {
@@ -349,13 +349,6 @@ export default function Pricing() {
   const [openFaq, setOpenFaq] = useState(0)
   const [pricingTab, setPricingTab] = useState('onetime')
   const activePlans = pricingTab === 'onetime' ? plans : retainerPlans
-  const tabRefs = useRef({})
-  const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 })
-
-  useLayoutEffect(() => {
-    const el = tabRefs.current[pricingTab]
-    if (el) setUnderlineStyle({ left: el.offsetLeft, width: el.offsetWidth })
-  }, [pricingTab])
 
   return (
     <>
@@ -378,44 +371,41 @@ export default function Pricing() {
         <div className="container">
 
           {/* Toggle */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, marginBottom: 48 }}>
-            <div style={{ position: 'relative', display: 'inline-flex', gap: 40 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginBottom: 48 }}>
+            <div style={{
+              display: 'inline-flex',
+              background: 'rgba(0,0,0,0.06)',
+              borderRadius: 100,
+              padding: 5,
+              gap: 4,
+              boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
+            }}>
               {[
                 { key: 'onetime',  label: 'One-time build' },
                 { key: 'retainer', label: 'Monthly retainer' },
               ].map(tab => (
                 <button
                   key={tab.key}
-                  ref={el => { tabRefs.current[tab.key] = el }}
                   onClick={() => setPricingTab(tab.key)}
                   style={{
-                    background: 'none',
+                    padding: '12px 32px',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    letterSpacing: '0.01em',
                     border: 'none',
+                    borderRadius: 100,
                     cursor: 'pointer',
-                    padding: '0 0 14px',
-                    fontFamily: 'var(--font-serif)',
-                    fontSize: 22,
-                    fontWeight: 700,
-                    letterSpacing: '-0.02em',
-                    color: pricingTab === tab.key ? 'var(--black)' : '#bbb',
-                    transition: 'color 0.25s ease',
-                    whiteSpace: 'nowrap',
+                    transition: 'background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
+                    background: pricingTab === tab.key ? 'var(--black)' : 'transparent',
+                    color: pricingTab === tab.key ? '#fff' : 'var(--black)',
+                    boxShadow: pricingTab === tab.key ? '0 2px 8px rgba(0,0,0,0.25)' : 'none',
+                    position: 'relative',
                   }}
                   aria-pressed={pricingTab === tab.key}
                 >
                   {tab.label}
                 </button>
               ))}
-              {/* Sliding underline */}
-              <div style={{
-                position: 'absolute',
-                bottom: 0,
-                left: underlineStyle.left,
-                width: underlineStyle.width,
-                height: 3,
-                background: 'var(--black)',
-                transition: 'left 0.25s ease, width 0.25s ease',
-              }} />
             </div>
             <p style={{
               fontSize: 11,
