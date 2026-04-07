@@ -371,35 +371,51 @@ export default function Pricing() {
         <div className="container">
 
           {/* Toggle */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 48 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginBottom: 48 }}>
             <div style={{
               display: 'inline-flex',
-              border: '1px solid var(--black)',
-              overflow: 'hidden',
+              background: 'rgba(0,0,0,0.06)',
+              borderRadius: 100,
+              padding: 5,
+              gap: 4,
+              boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
             }}>
               {[
-                { key: 'onetime',  label: 'One-time' },
+                { key: 'onetime',  label: 'One-time build' },
                 { key: 'retainer', label: 'Monthly retainer' },
               ].map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setPricingTab(tab.key)}
                   style={{
-                    padding: '10px 28px',
-                    fontSize: 13,
+                    padding: '12px 32px',
+                    fontSize: 14,
                     fontWeight: 600,
-                    letterSpacing: '0.02em',
+                    letterSpacing: '0.01em',
                     border: 'none',
+                    borderRadius: 100,
                     cursor: 'pointer',
-                    transition: 'background 0.2s ease, color 0.2s ease',
+                    transition: 'background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
                     background: pricingTab === tab.key ? 'var(--black)' : 'transparent',
                     color: pricingTab === tab.key ? '#fff' : 'var(--black)',
+                    boxShadow: pricingTab === tab.key ? '0 2px 8px rgba(0,0,0,0.25)' : 'none',
+                    position: 'relative',
                   }}
+                  aria-pressed={pricingTab === tab.key}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
+            <p style={{
+              fontSize: 11,
+              color: 'var(--muted)',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              margin: 0,
+            }}>
+              {pricingTab === 'onetime' ? 'Pay once, own it forever' : 'Ongoing support & growth'}
+            </p>
           </div>
 
           {pricingTab === 'onetime' && (
