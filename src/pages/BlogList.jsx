@@ -6,7 +6,15 @@ const categories = ['All', ...Array.from(new Set(posts.map(p => p.category))).so
 
 export default function BlogList() {
   const [active, setActive] = useState('All')
-  const visible = active === 'All' ? posts : posts.filter(p => p.category === active)
+  const [query, setQuery] = useState('')
+
+  const visible = posts
+    .filter(p => active === 'All' || p.category === active)
+    .filter(p => {
+      if (!query.trim()) return true
+      const q = query.toLowerCase()
+      return p.h1.toLowerCase().includes(q) || p.intro.toLowerCase().includes(q)
+    })
 
   return (
     <>
@@ -26,19 +34,50 @@ export default function BlogList() {
 
       <hr className="rule" />
 
-      {/* ── CATEGORY FILTERS ─────────────────── */}
+      {/* ── FILTERS: SEARCH + CATEGORIES ─────── */}
       <div className="blog-filters">
         <div className="container" style={{ maxWidth: 1320 }}>
-          <div className="blog-filter-tabs">
-            {categories.map(cat => (
+          <div className="blog-search-wrap">
+            <svg className="blog-search-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.3"/>
+              <line x1="11.7" y1="11.7" x2="16.5" y2="16.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+            </svg>
+            <input
+              className="blog-search"
+              type="text"
+              placeholder="Search articles…"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              aria-label="Search articles"
+            />
+            {query && (
               <button
-                key={cat}
-                className={`blog-filter-tab${active === cat ? ' active' : ''}`}
-                onClick={() => setActive(cat)}
+                className="blog-search-clear"
+                onClick={() => setQuery('')}
+                aria-label="Clear search"
               >
-                {cat}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                  <line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
               </button>
-            ))}
+            )}
+          </div>
+          <div className="blog-filter-bar">
+            <div className="blog-filter-tabs">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  className={`blog-filter-tab${active === cat ? ' active' : ''}`}
+                  onClick={() => setActive(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <span className="blog-result-count">
+              {visible.length} {visible.length === 1 ? 'article' : 'articles'}
+            </span>
           </div>
         </div>
       </div>
@@ -46,6 +85,9 @@ export default function BlogList() {
       {/* ── POST GRID ────────────────────────── */}
       <section style={{ padding: '48px 0 120px' }}>
         <div className="container" style={{ maxWidth: 1320 }}>
+          {visible.length === 0 && (
+            <p className="blog-no-results">No articles match your search.</p>
+          )}
           <div className="blog-grid">
             {visible.map(post => (
               <article key={post.slug} className="blog-card">
