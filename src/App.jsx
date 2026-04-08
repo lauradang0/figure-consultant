@@ -10,6 +10,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
+import NotFound from './pages/NotFound'
 
 const BlogList = lazy(() => import('./pages/BlogList'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
@@ -55,6 +56,7 @@ function AppRoutes() {
           {/* backward compat */}
           <Route path="/case-studies"       element={<PageWrapper><Work /></PageWrapper>} />
           <Route path="/case-studies/:slug" element={<PageWrapper><CaseStudyDetail /></PageWrapper>} />
+          <Route path="*"                   element={<PageWrapper><NotFound /></PageWrapper>} />
         </Routes>
       </main>
       <Footer />

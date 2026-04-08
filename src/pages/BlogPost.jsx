@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import NotFound from './NotFound'
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -52,23 +53,7 @@ export default function BlogPost() {
   }
 
   if (!post) {
-    return (
-      <section style={{ padding: '120px 0', textAlign: 'center' }}>
-        <div className="container">
-          <div className="label" style={{ marginBottom: 24 }}>Not found</div>
-          <h1 style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 40,
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-            marginBottom: 32,
-          }}>
-            Post not found
-          </h1>
-          <Link to="/blog" className="hero-cta">← Back to blog</Link>
-        </div>
-      </section>
-    )
+    return <NotFound backTo="/blog" backLabel="Back to blog" message="Post not found" />
   }
 
   return (

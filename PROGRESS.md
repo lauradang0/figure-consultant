@@ -1,5 +1,23 @@
 # Progress Log
 
+## Session: 2026-04-07
+
+### Done
+- Added proper custom 404 page (`src/pages/NotFound.jsx`) — label "404", serif heading, description, back link + optional home link
+- Added catch-all `<Route path="*" />` in `App.jsx` to handle all unmatched routes
+- Replaced inline "not found" blocks in `BlogPost.jsx` and `CaseStudyDetail.jsx` with reusable `<NotFound />` component (accepts `backTo`, `backLabel`, `message` props)
+
+### In Progress
+- Nothing — task complete
+
+### Next
+- Test: navigate to `/something-random`, `/work/fake-slug`, `/blog/fake-slug` to confirm 404 renders with Nav/Footer
+
+### Notes
+- `NotFound` is reusable with props — used for global catch-all (back to home) and inline dynamic-route misses (back to section)
+
+---
+
 ## Session: 2026-03-31
 
 ### Done

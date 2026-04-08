@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import NotFound from './NotFound'
 
 export const caseStudies = [
   {
@@ -89,17 +90,7 @@ export default function CaseStudyDetail() {
   const others = caseStudies.filter(cs => cs.slug !== slug).slice(0, 2)
 
   if (!c) {
-    return (
-      <section style={{ padding: '120px 0', textAlign: 'center' }}>
-        <div className="container">
-          <div className="label" style={{ marginBottom: 24 }}>Not found</div>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 40, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 32 }}>
-            Case study not found
-          </h2>
-          <Link to="/work" className="hero-cta">← Back to all work</Link>
-        </div>
-      </section>
-    )
+    return <NotFound backTo="/work" backLabel="Back to all work" message="Case study not found" />
   }
 
   return (
