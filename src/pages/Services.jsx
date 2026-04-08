@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const services = [
   {
@@ -62,6 +63,10 @@ const steps = [
 ]
 
 export default function Services() {
+  useSEO({
+    title: 'Services — Websites, AI Automations & Full Transformation | Figured Consulting',
+    description: 'Three focused service tracks: high-converting website redesigns, AI-powered workflow automations, and full digital transformation packages. Delivered in weeks.',
+  })
   return (
     <>
       {/* Page Hero */}

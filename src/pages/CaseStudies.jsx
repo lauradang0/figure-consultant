@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 export const caseStudies = [
   {
@@ -127,6 +128,10 @@ function CaseCard({ c }) {
 }
 
 export default function CaseStudies() {
+  useSEO({
+    title: 'Case Studies — Real Results | Figured Consulting',
+    description: 'See how Figured Consulting has helped businesses grow with custom websites, AI tools, and digital transformation. Real outcomes, not vanity metrics.',
+  })
   return (
     <>
       <section className="page-hero">

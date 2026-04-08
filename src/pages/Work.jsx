@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const work = [
   {
@@ -39,6 +40,10 @@ const work = [
 const cardHeights = Array(work.length).fill(500)
 
 export default function Work() {
+  useSEO({
+    title: 'Our Work — Real Results for Real Businesses | Figured Consulting',
+    description: 'See case studies from clients like Joe Gym and Luxury Nail Spa — websites and digital products that tripled bookings and doubled inbound leads.',
+  })
   const [hoveredSlug, setHoveredSlug] = useState(null)
   const [gifVersionBySlug, setGifVersionBySlug] = useState({})
 

@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { postsIndex as posts } from '../data/postsIndex'
+import { useSEO } from '../hooks/useSEO'
 
 const categories = ['All', ...Array.from(new Set(posts.map(p => p.category))).sort()]
 
 export default function BlogList() {
+  useSEO({
+    title: 'Blog — Digital Growth Insights | Figured Consulting',
+    description: 'Practical guides on websites, AI automations, and digital growth strategies for small and mid-sized businesses.',
+  })
   const [active, setActive] = useState('All')
   const [query, setQuery] = useState('')
 

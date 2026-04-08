@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import NotFound from './NotFound'
+import { useSEO } from '../hooks/useSEO'
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -23,24 +24,10 @@ export default function BlogPost() {
       })
   }, [slug])
 
-  useEffect(() => {
-    if (!post) return
-
-    document.title = post.seoTitle
-
-    let meta = document.querySelector('meta[name="description"]')
-    if (!meta) {
-      meta = document.createElement('meta')
-      meta.setAttribute('name', 'description')
-      document.head.appendChild(meta)
-    }
-    meta.setAttribute('content', post.metaDescription)
-
-    return () => {
-      document.title = 'Figured Consulting'
-      if (meta) meta.setAttribute('content', '')
-    }
-  }, [post])
+  useSEO({
+    title: post ? post.seoTitle : 'Post Not Found — Figured Consulting',
+    description: post ? post.metaDescription : '',
+  })
 
   if (loading) {
     return (

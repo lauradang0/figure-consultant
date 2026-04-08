@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const stats = [
   { value: '40+',   label: 'Projects delivered' },
@@ -32,6 +33,10 @@ const testimonials = [
 ]
 
 export default function About() {
+  useSEO({
+    title: 'About — Figured Consulting',
+    description: 'A boutique digital agency of engineers and designers who ship fast, communicate honestly, and charge for outcomes — not hours. 40+ projects delivered.',
+  })
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────── */}

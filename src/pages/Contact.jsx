@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const PACKAGE_OPTIONS = [
   { value: 'starter', label: 'Starter ($999)' },
@@ -27,6 +28,10 @@ function normalizePackageParam(packageParam) {
 }
 
 export default function Contact() {
+  useSEO({
+    title: 'Contact — Book a Free Discovery Call | Figured Consulting',
+    description: 'Book a free 30-minute discovery call. Tell us about your project and we\'ll map out a custom plan within 48 hours. No commitment required.',
+  })
   const [searchParams] = useSearchParams()
 
   const defaultPackage = useMemo(() => normalizePackageParam(searchParams.get('package') || ''), [searchParams])
