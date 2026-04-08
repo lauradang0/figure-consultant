@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { useSEO } from '../hooks/useSEO'
 
 const PHRASES = [
   'automate the busywork',
@@ -11,25 +10,6 @@ const PHRASES = [
   'put you ahead of competitors',
 ]
 
-const homeFaqs = [
-  {
-    q: "How fast can you actually launch?",
-    a: "Most projects go live within 2–4 weeks from your kickoff call. Starter and Growth builds typically land in 3 weeks. Custom projects with automation or AI integrations may take 5–6 weeks. You'll get a precise timeline in your proposal — no vague estimates.",
-  },
-  {
-    q: "What's included in the build fee?",
-    a: "Everything needed to go live: design, development, integrations, QA, and launch support. Hosting is separate and typically runs $20–50/month depending on your stack. No hidden fees, no surprise invoices after the fact.",
-  },
-  {
-    q: "Do you offer payment plans?",
-    a: "Yes. We offer a 50% upfront / 50% on launch split for all builds. If you need a different arrangement, bring it up on the call — we're flexible for the right fit.",
-  },
-  {
-    q: "Can I start with a one-time build and add a retainer later?",
-    a: "Absolutely. Most clients start with a one-time build, then move to a monthly retainer once they see the results. There's no pressure — add, pause, or cancel the retainer anytime with 14 days' notice.",
-  },
-]
-
 const BADGES = [
   'Websites & landing pages',
   'E-commerce & payments',
@@ -37,6 +17,34 @@ const BADGES = [
   'Workflow automation',
   'Custom dashboards & tools',
 ]
+
+const CARD_W = 456          // 440px card + 16px gap
+const TOTAL_W = CARD_W * 4  // one full set (4 cards)
+
+function onCardMouseMove(e) {
+  if (e.buttons === 1) return // skip tilt while dragging
+  const card = e.currentTarget
+  const rect = card.getBoundingClientRect()
+  const x = (e.clientX - rect.left) / rect.width
+  const y = (e.clientY - rect.top)  / rect.height
+  const tiltX = (y - 0.5) * -10
+  const tiltY = (x - 0.5) *  10
+  card.style.transition = 'transform 0.08s linear'
+  card.style.transform  = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.03,1.03,1.03)`
+  const shine = card.querySelector('.marquee-card-shine')
+  if (shine) {
+    shine.style.opacity    = '1'
+    shine.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.18) 0%, transparent 65%)`
+  }
+}
+
+function onCardMouseLeave(e) {
+  const card = e.currentTarget
+  card.style.transition = 'transform 0.55s cubic-bezier(0.23,1,0.32,1)'
+  card.style.transform  = ''
+  const shine = card.querySelector('.marquee-card-shine')
+  if (shine) shine.style.opacity = '0'
+}
 
 const featuredWork = [
   {
@@ -47,6 +55,7 @@ const featuredWork = [
     metric: { value: '+118%', label: 'Trial signups' },
     bg: '/joe-gym2.png',
     gif: '/joe-gym.gif',
+    url: 'joegym.co',
   },
   {
     slug: 'nail-spa',
@@ -56,6 +65,27 @@ const featuredWork = [
     metric: { value: '3×', label: 'Online bookings' },
     bg: '/nail-spa.png',
     gif: '/nail-spa.gif',
+    url: 'luxurynailspa.com',
+  },
+  {
+    slug: 'francis-alcos',
+    client: 'Francis Alcos',
+    tag: 'Portfolio Website',
+    desc: 'Restructured a personal portfolio to highlight strongest projects and make inquiry paths more direct.',
+    metric: { value: '+74%', label: 'Qualified inquiries' },
+    bg: '/francis-alcos-portfolio.png',
+    gif: '/francis-alcos-portfolio.gif',
+    url: 'francisalcos.com',
+  },
+  {
+    slug: 'laura-dang',
+    client: 'Laura Dang',
+    tag: 'Portfolio Refresh',
+    desc: 'Updated messaging, service structure, and contact flow to better convert visitors into consultation calls.',
+    metric: { value: '+67%', label: 'Consult calls' },
+    bg: '/laura-dang-portfolio.png',
+    gif: '/laura-dang-portfolio.gif',
+    url: 'lauradang.com',
   },
 ]
 
@@ -119,11 +149,59 @@ function useTypewriter() {
 
 export default function Home() {
   const { displayed: typed, announced } = useTypewriter()
-  useSEO({
-    title: 'Figured Consulting — Websites, Software & AI Tools',
-    description: 'We build digital products that automate your business, boost conversions, and ship in weeks — not months. Websites, software, and AI tools built fast and built right.',
-  })
-  const [openFaq, setOpenFaq] = useState(null)
+  const marqueeRef     = useRef(null)
+  const offsetRef      = useRef(0)
+  const pausedRef      = useRef(false)
+  const animRef        = useRef(null)
+  const dragStartX     = useRef(null)
+  const dragStartOff   = useRef(0)
+  const isDragging     = useRef(false)
+  const [lightbox, setLightbox] = useState(null)
+
+  useEffect(() => {
+    if (!lightbox) return
+    const handler = (e) => { if (e.key === 'Escape') setLightbox(null) }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [lightbox])
+
+  useEffect(() => {
+    const el = marqueeRef.current
+    if (!el) return
+    const tick = () => {
+      if (!pausedRef.current) {
+        offsetRef.current += 0.7
+        if (offsetRef.current >= TOTAL_W) offsetRef.current -= TOTAL_W
+        el.style.transform = `translateX(-${offsetRef.current}px)`
+      }
+      animRef.current = requestAnimationFrame(tick)
+    }
+    animRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(animRef.current)
+  }, [])
+
+  const onPointerDown = (e) => {
+    isDragging.current   = true
+    pausedRef.current    = true
+    dragStartX.current   = e.clientX
+    dragStartOff.current = offsetRef.current
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+
+  const onPointerMove = (e) => {
+    if (!isDragging.current) return
+    const delta = dragStartX.current - e.clientX
+    offsetRef.current = ((dragStartOff.current + delta) % TOTAL_W + TOTAL_W) % TOTAL_W
+    const el = marqueeRef.current
+    if (el) el.style.transform = `translateX(-${offsetRef.current}px)`
+  }
+
+  const onPointerUp = () => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    pausedRef.current  = false
+  }
+
   return (
     <>
       {/* ── HERO ─────────────────────────────── */}
@@ -175,7 +253,7 @@ export default function Home() {
       <hr className="rule" />
 
       {/* ── FEATURED WORK ────────────────────── */}
-      <section style={{ padding: '52px 0' }}>
+      <section style={{ padding: '52px 0 0' }}>
         <div className="container">
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 36 }}>
             <div>
@@ -190,43 +268,39 @@ export default function Home() {
                 Results we're proud of
               </h2>
             </div>
-            <Link to="/work" className="hero-secondary-link" style={{ flexShrink: 0 }}>
-              See all work →
-            </Link>
+            <Link to="/work" className="hero-secondary-link" style={{ flexShrink: 0 }}>See all work →</Link>
           </div>
+        </div>
 
-          <div className="featured-work-grid">
-            {featuredWork.map(w => (
+        <div
+          className="marquee-outer"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+        >
+          <div ref={marqueeRef} className="marquee-track">
+            {[...featuredWork, ...featuredWork].map((w, i) => (
               <Link
-                key={w.slug}
+                key={`${w.slug}-${i}`}
                 to={`/work/${w.slug}`}
-                className="case-card"
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                className="marquee-card"
+                style={{ textDecoration: 'none' }}
+                onMouseMove={onCardMouseMove}
+                onMouseLeave={onCardMouseLeave}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onCardMouseLeave(e)
+                  setLightbox(w)
+                }}
               >
-                {/* Image — always show GIF */}
-                <div className="case-image has-thumbnail" style={{
-                  backgroundImage: `url(${w.gif})`,
-                  position: 'relative',
-                  overflow: 'hidden',
-                }} />
-
-                {/* Body */}
-                <div className="case-body">
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 8 }}>
-                    <span className="case-client">{w.client}</span>
-                    <span style={{
-                      fontSize: 10,
-                      fontWeight: 600,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: 'var(--muted)',
-                      flexShrink: 0,
-                    }}>{w.tag}</span>
-                  </div>
-                  <p className="case-desc">{w.desc}</p>
-                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--rule)' }}>
-                    <div className="case-metric-value">{w.metric.value}</div>
-                    <div className="case-metric-label">{w.metric.label}</div>
+                <div
+                  className="marquee-card-inner"
+                  style={{ backgroundImage: `url(${w.bg})` }}
+                >
+                  <div className="marquee-card-shine" />
+                  <div className="marquee-card-overlay">
+                    <div className="marquee-card-client">{w.client}</div>
                   </div>
                 </div>
               </Link>
@@ -307,9 +381,21 @@ export default function Home() {
       <section style={{ padding: '64px 0' }}>
         <div className="container">
           <div className="label" style={{ marginBottom: 36, textAlign: 'center' }}>What clients say</div>
-          <div className="testimonials-grid">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            borderTop: '1px solid var(--rule)',
+          }}>
             {testimonials.map((t, i) => (
-              <div key={t.name} className="testimonial-home-item">
+              <div key={t.name} style={{
+                padding: '36px 36px 36px 0',
+                paddingLeft: i === 0 ? 0 : 36,
+                borderRight: i < testimonials.length - 1 ? '1px solid var(--rule)' : 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: 32,
+              }}>
                 <blockquote style={{
                   fontFamily: 'var(--font-serif)',
                   fontSize: 16,
@@ -347,85 +433,6 @@ export default function Home() {
 
       <hr className="rule" />
 
-      {/* ── FAQ ──────────────────────────────── */}
-      <section style={{ padding: '64px 0' }}>
-        <div className="container">
-          <div className="faq-layout">
-            <div>
-              <div className="label" style={{ marginBottom: 14 }}>FAQ</div>
-              <h2 style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 25,
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.2,
-                marginBottom: 20,
-              }}>
-                Common questions
-              </h2>
-              <Link to="/pricing" style={{ fontSize: 12, color: 'var(--muted)', textDecoration: 'underline', textUnderlineOffset: 2 }}>
-                See all FAQs on pricing →
-              </Link>
-            </div>
-            <div>
-              {homeFaqs.map((f, i) => (
-                <div key={f.q} style={{ borderTop: i === 0 ? 'none' : '1px solid var(--rule)' }}>
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    aria-expanded={openFaq === i}
-                    style={{
-                      width: '100%',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '14px 0',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: 16,
-                      textAlign: 'left',
-                    }}
-                  >
-                    <span style={{
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: 15,
-                      fontWeight: 600,
-                      letterSpacing: '-0.01em',
-                      color: 'var(--black)',
-                    }}>
-                      {f.q}
-                    </span>
-                    <span aria-hidden="true" style={{
-                      fontSize: 18,
-                      fontWeight: 300,
-                      color: 'var(--muted)',
-                      flexShrink: 0,
-                      lineHeight: 1,
-                      display: 'block',
-                      transition: 'transform 0.3s ease',
-                      transform: openFaq === i ? 'rotate(45deg)' : 'none',
-                    }}>
-                      +
-                    </span>
-                  </button>
-                  <div style={{
-                    overflow: 'hidden',
-                    maxHeight: openFaq === i ? '300px' : '0',
-                    transition: 'max-height 0.35s ease',
-                  }}>
-                    <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, paddingBottom: 14 }}>
-                      {f.a}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <hr className="rule" />
-
       {/* ── BOTTOM CTA ───────────────────────── */}
       <section className="section-cta">
         <div className="container">
@@ -438,6 +445,26 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      {/* ── LIGHTBOX ─────────────────────────── */}
+      {lightbox && (
+        <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setLightbox(null)}>×</button>
+            <img src={lightbox.bg} alt={lightbox.client} className="lightbox-img" />
+            <div className="lightbox-footer">
+              <span className="lightbox-client">{lightbox.client}</span>
+              <span className="lightbox-metric">{lightbox.metric.value}</span>
+              <Link
+                to={`/work/${lightbox.slug}`}
+                className="lightbox-link"
+                onClick={() => setLightbox(null)}
+              >
+                View project →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
