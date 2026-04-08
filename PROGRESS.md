@@ -11,12 +11,16 @@
 - Generated 126 SEO blog posts across 14 categories for ~125 business niches
 - `npm run build` passes cleanly
 
+## Session: 2026-04-07
+
+### Done
+- Added "Common questions" FAQ accordion to Home page — 4 objection-handling FAQs placed between the client logos and bottom CTA, reusing the `.faq-layout` grid and Pricing page accordion pattern; includes "See all FAQs on pricing →" link
+
 ### In Progress
-- Nothing — all planned tasks complete
+- Nothing
 
 ### Next
-- Start dev server and manually verify `/blog` and a few sample post routes
-- Optional: commit everything with a clear message
+- Review and test home page FAQ accordion in dev server
 
 ### Notes
 - posts.js is ~606 KB which causes a Vite bundle size warning (non-breaking) — could be split later with dynamic imports if load time becomes an issue
