@@ -6,7 +6,15 @@ const categories = ['All', ...Array.from(new Set(posts.map(p => p.category))).so
 
 export default function BlogList() {
   const [active, setActive] = useState('All')
-  const visible = active === 'All' ? posts : posts.filter(p => p.category === active)
+  const [query, setQuery] = useState('')
+
+  const visible = posts
+    .filter(p => active === 'All' || p.category === active)
+    .filter(p => {
+      if (!query.trim()) return true
+      const q = query.toLowerCase()
+      return p.h1.toLowerCase().includes(q) || p.intro.toLowerCase().includes(q)
+    })
 
   return (
     <>
@@ -26,9 +34,18 @@ export default function BlogList() {
 
       <hr className="rule" />
 
-      {/* ── CATEGORY FILTERS ─────────────────── */}
+      {/* ── FILTERS: SEARCH + CATEGORIES ─────── */}
       <div className="blog-filters">
         <div className="container" style={{ maxWidth: 1320 }}>
+          <div className="blog-search-wrap">
+            <input
+              className="blog-search"
+              type="search"
+              placeholder="Search articles…"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+            />
+          </div>
           <div className="blog-filter-tabs">
             {categories.map(cat => (
               <button
@@ -46,6 +63,9 @@ export default function BlogList() {
       {/* ── POST GRID ────────────────────────── */}
       <section style={{ padding: '48px 0 120px' }}>
         <div className="container" style={{ maxWidth: 1320 }}>
+          {visible.length === 0 && (
+            <p className="blog-no-results">No articles match your search.</p>
+          )}
           <div className="blog-grid">
             {visible.map(post => (
               <article key={post.slug} className="blog-card">
