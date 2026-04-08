@@ -38,24 +38,43 @@ export default function BlogList() {
       <div className="blog-filters">
         <div className="container" style={{ maxWidth: 1320 }}>
           <div className="blog-search-wrap">
+            <svg className="blog-search-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.3"/>
+              <line x1="11.7" y1="11.7" x2="16.5" y2="16.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+            </svg>
             <input
               className="blog-search"
-              type="search"
+              type="text"
               placeholder="Search articles…"
               value={query}
               onChange={e => setQuery(e.target.value)}
+              aria-label="Search articles"
             />
-          </div>
-          <div className="blog-filter-tabs">
-            {categories.map(cat => (
+            {query && (
               <button
-                key={cat}
-                className={`blog-filter-tab${active === cat ? ' active' : ''}`}
-                onClick={() => setActive(cat)}
+                className="blog-search-clear"
+                onClick={() => setQuery('')}
+                aria-label="Clear search"
               >
-                {cat}
+                ×
               </button>
-            ))}
+            )}
+          </div>
+          <div className="blog-filter-bar">
+            <div className="blog-filter-tabs">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  className={`blog-filter-tab${active === cat ? ' active' : ''}`}
+                  onClick={() => setActive(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <span className="blog-result-count">
+              {visible.length} {visible.length === 1 ? 'article' : 'articles'}
+            </span>
           </div>
         </div>
       </div>
