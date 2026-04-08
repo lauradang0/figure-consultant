@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import NotFound from './NotFound'
+import { useSEO } from '../hooks/useSEO'
 
 export const caseStudies = [
   {
@@ -88,6 +89,10 @@ export default function CaseStudyDetail() {
   const { slug } = useParams()
   const c = caseStudies.find(cs => cs.slug === slug)
   const others = caseStudies.filter(cs => cs.slug !== slug).slice(0, 2)
+  useSEO({
+    title: c ? `${c.client} — ${c.title} | Figured Consulting` : 'Case Study Not Found | Figured Consulting',
+    description: c ? c.desc : '',
+  })
 
   if (!c) {
     return <NotFound backTo="/work" backLabel="Back to all work" message="Case study not found" />

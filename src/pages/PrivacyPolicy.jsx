@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const sections = [
   {
@@ -39,6 +40,10 @@ const sections = [
 ]
 
 export default function PrivacyPolicy() {
+  useSEO({
+    title: 'Privacy Policy — Figured Consulting',
+    description: 'Read our privacy policy to understand how Figured Consulting collects, uses, and protects your information.',
+  })
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────── */}

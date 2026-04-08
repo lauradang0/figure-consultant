@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const PHRASES = [
   'automate the busywork',
@@ -118,6 +119,10 @@ function useTypewriter() {
 
 export default function Home() {
   const { displayed: typed, announced } = useTypewriter()
+  useSEO({
+    title: 'Figured Consulting — Websites, Software & AI Tools',
+    description: 'We build digital products that automate your business, boost conversions, and ship in weeks — not months. Websites, software, and AI tools built fast and built right.',
+  })
   const [openFaq, setOpenFaq] = useState(null)
   return (
     <>

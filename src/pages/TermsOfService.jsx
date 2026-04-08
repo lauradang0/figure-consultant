@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const sections = [
   {
@@ -39,6 +40,10 @@ const sections = [
 ]
 
 export default function TermsOfService() {
+  useSEO({
+    title: 'Terms of Service — Figured Consulting',
+    description: 'Read the terms and conditions governing use of Figured Consulting\'s services and website.',
+  })
   return (
     <>
       {/* ── PAGE HEADER ──────────────────────── */}

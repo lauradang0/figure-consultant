@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { useSEO } from '../hooks/useSEO'
 
 const plans = [
   {
@@ -346,6 +347,10 @@ function PricingGrid({ items }) {
 }
 
 export default function Pricing() {
+  useSEO({
+    title: 'Pricing — Transparent, No-Surprise Plans | Figured Consulting',
+    description: 'Simple, transparent pricing for websites, AI tools, and digital products. One-time builds from $499. Monthly retainers from $99. No hidden costs.',
+  })
   const [openFaq, setOpenFaq] = useState(0)
   const [pricingTab, setPricingTab] = useState('onetime')
   const activePlans = pricingTab === 'onetime' ? plans : retainerPlans
