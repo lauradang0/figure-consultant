@@ -10,6 +10,25 @@ const PHRASES = [
   'put you ahead of competitors',
 ]
 
+const homeFaqs = [
+  {
+    q: "How fast can you actually launch?",
+    a: "Most projects go live within 2–4 weeks from your kickoff call. Starter and Growth builds typically land in 3 weeks. Custom projects with automation or AI integrations may take 5–6 weeks. You'll get a precise timeline in your proposal — no vague estimates.",
+  },
+  {
+    q: "What's included in the build fee?",
+    a: "Everything needed to go live: design, development, integrations, QA, and launch support. Hosting is separate and typically runs $20–50/month depending on your stack. No hidden fees, no surprise invoices after the fact.",
+  },
+  {
+    q: "Do you offer payment plans?",
+    a: "Yes. We offer a 50% upfront / 50% on launch split for all builds. If you need a different arrangement, bring it up on the call — we're flexible for the right fit.",
+  },
+  {
+    q: "Can I start with a one-time build and add a retainer later?",
+    a: "Absolutely. Most clients start with a one-time build, then move to a monthly retainer once they see the results. There's no pressure — add, pause, or cancel the retainer anytime with 14 days' notice.",
+  },
+]
+
 const BADGES = [
   'Websites & landing pages',
   'E-commerce & payments',
@@ -99,6 +118,7 @@ function useTypewriter() {
 
 export default function Home() {
   const { displayed: typed, announced } = useTypewriter()
+  const [openFaq, setOpenFaq] = useState(null)
   return (
     <>
       {/* ── HERO ─────────────────────────────── */}
@@ -316,6 +336,85 @@ export default function Home() {
             {['Luxury Nail Spa', 'Joe Gym', 'Laura Dang Consulting', 'Francis Alcos'].map(name => (
               <span key={name} className="logo-name">{name}</span>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <hr className="rule" />
+
+      {/* ── FAQ ──────────────────────────────── */}
+      <section style={{ padding: '64px 0' }}>
+        <div className="container">
+          <div className="faq-layout">
+            <div>
+              <div className="label" style={{ marginBottom: 14 }}>FAQ</div>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 25,
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
+                marginBottom: 20,
+              }}>
+                Common questions
+              </h2>
+              <Link to="/pricing" style={{ fontSize: 12, color: 'var(--muted)', textDecoration: 'underline', textUnderlineOffset: 2 }}>
+                See all FAQs on pricing →
+              </Link>
+            </div>
+            <div>
+              {homeFaqs.map((f, i) => (
+                <div key={f.q} style={{ borderTop: i === 0 ? 'none' : '1px solid var(--rule)' }}>
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    aria-expanded={openFaq === i}
+                    style={{
+                      width: '100%',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '14px 0',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 16,
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span style={{
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: 15,
+                      fontWeight: 600,
+                      letterSpacing: '-0.01em',
+                      color: 'var(--black)',
+                    }}>
+                      {f.q}
+                    </span>
+                    <span aria-hidden="true" style={{
+                      fontSize: 18,
+                      fontWeight: 300,
+                      color: 'var(--muted)',
+                      flexShrink: 0,
+                      lineHeight: 1,
+                      display: 'block',
+                      transition: 'transform 0.3s ease',
+                      transform: openFaq === i ? 'rotate(45deg)' : 'none',
+                    }}>
+                      +
+                    </span>
+                  </button>
+                  <div style={{
+                    overflow: 'hidden',
+                    maxHeight: openFaq === i ? '300px' : '0',
+                    transition: 'max-height 0.35s ease',
+                  }}>
+                    <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, paddingBottom: 14 }}>
+                      {f.a}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
