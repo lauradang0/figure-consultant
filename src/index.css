@@ -240,13 +240,10 @@ nav {
 /* ── TYPEWRITER ──────────────────────────── */
 .hero-typed-line {
   display: block;
-  height: 1.15em;      /* fixed — never grows regardless of phrase length */
-  overflow: visible;   /* long phrases overflow horizontally, not vertically */
-  white-space: nowrap; /* prevent internal wrap that would cause vertical overflow */
+  height: 2.3em; /* 2 lines × 1.15 line-height — phrases wrap inside, never overflow */
 }
 .hero-typed {
   display: inline;
-  white-space: nowrap;
   font-family: var(--font-serif);
   font-style: italic;
   color: #2a6644;
@@ -1826,9 +1823,8 @@ footer {
   .cases-grid { grid-template-columns: 1fr; }
   .hero-sub { font-size: 15px; }
   .hero-typed-line {
-    white-space: normal;  /* allow wrapping on narrow screens */
     height: auto;
-    min-height: 3.45em;   /* 3 lines max at mobile font size — locks layout */
+    min-height: 3.45em; /* 3 lines max at mobile font size — locks layout */
   }
   .page-header { padding: 72px 0 60px; }
   .page-header-title { font-size: 44px; }
