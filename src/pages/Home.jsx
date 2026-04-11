@@ -208,11 +208,13 @@ export default function Home() {
       <section className="hero">
         <div className="container">
           <h1 className="hero-title">
-            We build digital products that{' '}
-            <span className="hero-typed" aria-hidden="true">
-              {typed}<span className="hero-cursor" aria-hidden="true" />
+            <span className="hero-title-static">We build digital products that</span>
+            <span className="hero-title-dynamic">
+              <span className="hero-typed" aria-hidden="true">
+                {typed}<span className="hero-cursor" aria-hidden="true" />
+              </span>
+              <span className="sr-only" aria-live="polite" aria-atomic="true">{announced}</span>
             </span>
-            <span className="sr-only" aria-live="polite" aria-atomic="true">{announced}</span>
           </h1>
           <p className="hero-sub">
             Websites, software, and AI tools — built fast, built right.

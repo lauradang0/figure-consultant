@@ -237,6 +237,15 @@ nav {
 }
 .hero-cta:hover { opacity: 0.4; }
 
+/* ── HERO TITLE LAYOUT ───────────────────── */
+.hero-title-static {
+  display: block;
+}
+.hero-title-dynamic {
+  display: block;
+  min-height: 1.15em;
+}
+
 /* ── TYPEWRITER ──────────────────────────── */
 .hero-typed {
   display: inline;
